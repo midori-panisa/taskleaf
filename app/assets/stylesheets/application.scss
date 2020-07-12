@@ -11,3 +11,15 @@ h1{
   padding-left: 10px;
   font-weight: bold;
 }
+
+.col-form-label {
+  margin-left: 10px;
+}
+
+.btn:not(:disabled):not(.disabled) {
+  margin-left: 10px;
+}
+
+.button, input {
+  margin-left: 10px;
+}
