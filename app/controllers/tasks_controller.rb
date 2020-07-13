@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
   def index
     @q = current_user.tasks.ransack(params[:q])
-    @tasks = @q.result(distinct: true)
+    @tasks = @q.result(distinct: true).page(params[:page])
     respond_to do |format|
       format.html
       format.csv { send_data @tasks.generate_csv, filename: "tasks- #{Time.zone.now.strftime('%Y%m%d%S')}.csv" }
@@ -24,6 +24,7 @@ class TasksController < ApplicationController
     end
     if @task.save
       TaskMailer.creation_email(@task).deliver_now
+      SampleJob.perform_later
       redirect_to @task, notice: "タスク「#{@task.name}」を登録しました。"
     else
       render :new
